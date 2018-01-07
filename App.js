@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import * as firebase from "firebase";
 import HtmlParser from 'react-native-htmlparser';
-import Auth from "./components/Auth";
-import Search from "./components/Search";
+//import Auth from "./components/Auth";
+//import Search from "./components/Search";
 
 // Initialize Firebase
 const config = {
@@ -23,11 +23,11 @@ export default class App extends React.Component {
     constructor() {
         super();
         let rootRef = firebase.database().ref();
-        this.itemsRef = rootRef.child("test");
-        let userStatus = firebase.auth().currentUser;
-        console.log(userStatus);
+        //this.itemsRef = rootRef.child("test");
+        //let userStatus = firebase.auth().currentUser;
+        //console.log(userStatus);
         this.state = {
-            user: userStatus,
+            //user: userStatus,
             location: "home",
             stuff: "",
         };
@@ -50,37 +50,24 @@ export default class App extends React.Component {
     }
         
     componentDidMount() { 
-        this.listenForItems(this.itemsRef);
-        let user = firebase.auth().currentUser;
+		console.log("bro");
+        //this.listenForItems(this.itemsRef);
+        //let user = firebase.auth().currentUser;
 
-        console.log(user);
-        if (user) {
-            this.setState({ "location": "home" })
-        } else {
-            this.setState({ "location": "login"})
-        }
+        //console.log(user);
+        //if (user) {
+        //    this.setState({ "location": "home" })
+        //} else {
+        //    this.setState({ "location": "login"})
+        //}
     }
 
     render() {
        switch(this.state.location) { 
-            case "home":
-                let buttons = []
-                if (this.state.stuff != "") {
-                    this.state.stuff.map((x) => { buttons.push(<Text> { x } </Text>) })
-                }
-
-                return (
-                    <View style={ styles.container }>
-                        <Text>Stanford Handbook </Text>
-                        { buttons }
-                    </View>
-                );
-            case "login":
-                return(
-                    <View style={ styles.container }>
-                        <Search />
-                    </View>
-                )
+			case "home":
+				return(
+					<Text>Hello World</Text>
+				)
         }
     }
 }
