@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import * as firebase from "firebase";
 import HtmlParser from 'react-native-htmlparser';
+import Section from "./Section";
 //import Auth from "./components/Auth";
 //import Search from "./components/Search";
 
@@ -23,35 +24,36 @@ export default class App extends React.Component {
     constructor() {
         super();
         let rootRef = firebase.database().ref();
-        //this.itemsRef = rootRef.child("test");
+        this.itemsRef = rootRef;
         //let userStatus = firebase.auth().currentUser;
         //console.log(userStatus);
         this.state = {
             //user: userStatus,
             location: "home",
-            stuff: "",
+            table_of_contents: {"test": ["a","b"]}
         };
     }
 
     listenForItems(itemsRef) {
         itemsRef.on("value", (snap) => {
             // get children as an array
-            var items = [];
-            snap.forEach((child) => {
-                items.push( 
-                    child.val()
-                );
-            });
+
+			let items = {}
+			snap.forEach((child) => {
+				items[child.key] = []
+				child.forEach((grandChild) => {
+					items[child.key].push(grandChild.key)
+				})
+			})
 
             this.setState({
-                stuff: items
+                "table_of_contents": items
             });
         });
     }
         
-    componentDidMount() { 
-		console.log("bro");
-        //this.listenForItems(this.itemsRef);
+    componentWillMount() { 
+        this.listenForItems(this.itemsRef);
         //let user = firebase.auth().currentUser;
 
         //console.log(user);
@@ -63,12 +65,20 @@ export default class App extends React.Component {
     }
 
     render() {
-       switch(this.state.location) { 
+		let components = []
+		Object.keys(this.state.table_of_contents).map((key) => {
+			components.push(<Section area={ key } sections={ this.state.table_of_contents[key]} />)
+		});
+
+		switch(this.state.location) { 
 			case "home":
 				return(
-					<Text>Hello World</Text>
+					<View>
+						{ components }
+					</View>
 				)
-        }
+				break;
+		}
     }
 }
 
