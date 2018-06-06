@@ -29,8 +29,8 @@ export default class App extends React.Component {
         //console.log(userStatus);
         this.state = {
             //user: userStatus,
-            location: "lol",
-            table_of_contents: {"test": {"a": {"content": ""}, "b": {"content": ""}}}
+            location: "home",
+            table_of_contents: {"test": {"a": {"content": ""}}, "b": {"content": ""}}
         };
     }
 
@@ -43,8 +43,8 @@ export default class App extends React.Component {
             });
         });
     }
-        
-    componentWillMount() { 
+
+    componentWillMount() {
         this.listenForItems(this.itemsRef);
         //let user = firebase.auth().currentUser;
 
@@ -60,23 +60,20 @@ export default class App extends React.Component {
         let components = []
         Object.keys(ob).map((key) => {
             if (key != "content") {
-                let component = <Section name={ key }> { this.makeNav(ob[key]) } </Section>
-                console.log(component)
+                console.log("Key: ", key)
+                let component = <Section key={ key } name={ key }>{this.makeNav(ob[key])}</Section>
                 components.push(component)
             }
         })
-
         return(components)
     }
 
     render() {
-        switch(this.state.location) { 
+        switch(this.state.location) {
 			case "home":
 				return(
 					<View style={ styles }>
-                        <Text>Hello </Text>
-                        <Text>Hello </Text>
-                        { this.makeNav(this.state.table_of_contents) }
+            { this.makeNav(this.state.table_of_contents) }
 					</View>
 				)
 				break;
@@ -88,11 +85,9 @@ export default class App extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+const styles = {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center'
+};
