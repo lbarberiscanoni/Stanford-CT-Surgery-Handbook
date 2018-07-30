@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, WebView, Button, Image} from 'react-native';
+import { StyleSheet, View, ScrollView, WebView, Button, Image, Text} from 'react-native';
 import * as firebase from "firebase";
 import HtmlParser from 'react-native-htmlparser';
 import Section from "./Section";
@@ -21,12 +21,11 @@ export default class App extends React.Component {
 
     constructor() {
         super();
-        require('./manual/TRANSCATHETER_AORTIC_VALVE_REPLACEMENT_(TAVR).jpg')
         let rootRef = firebase.database().ref();
         this.itemsRef = rootRef;
         this.state = {
             location: "home",
-            table_of_contents: {"test": {"a": {"content": ""}}, "b": {"content": ""}},
+            table_of_contents: {},
             link: ''
         };
 
@@ -59,7 +58,7 @@ export default class App extends React.Component {
                 components.push(component)
             }else{
               // Content
-              components.push(<Button onPress={() => this.viewContent(link)} key = { count } title = "View Content"/>)
+              components.push(<Button color = '#8c1515' onPress={() => this.viewContent(link)} key = { count } title = "View Content"/>)
             }
         })
         return(components)
@@ -69,27 +68,32 @@ export default class App extends React.Component {
         switch(this.state.location) {
     			case "home":
     				return(
-    					<ScrollView contentContainerStyle={ styles.contentContainer }>
+    					<View contentContainerStyle={ styles.contentContainer }>
                 <View style = { styles.imageHolder }>
                   <Image style = { styles.image } source={require('./stanford_medicine_logo.png')} />
                 </View>
-                { this.makeNav(this.state.table_of_contents, 0, '0/Manual/') }
-    					</ScrollView>
+                <ScrollView>
+                  { this.makeNav(this.state.table_of_contents, 0, '0/Manual/') }
+                </ScrollView>
+    					</View>
     				)
             break;
           case "content":
             console.log("http://d2vd81lu361af4.cloudfront.net/viewContent?" + this.state.link)
             return(
               <View style = { webViewStyles.container } >
-                <Button onPress = {() => this.setState({location: 'home'})} title = {"Back"}/>
+                <View style = { styles.imageHolder }>
+                  <Image style = { styles.image } source={require('./stanford_medicine_logo.png')} />
+                </View>
+                <Button color = '#8c1515' onPress = {() => this.setState({location: 'home'})} title = {"Back"}/>
                 <WebView
                   style = {{
-                    width: 320,
+                    width: '100%',
                     flex: 1
                   }}
                   javaScriptEnabled
                   renderLoading={() => <ActivityIndicator size={'small'} />}
-                  renderError={() => <LoadingError />}
+                  renderError={() => <Text> A Loading error has occured</Text>}
                   scrollEnabled
                   scalesPageToFit
                   source={{uri: "http://d2vd81lu361af4.cloudfront.net/viewContent?" + this.state.link}}

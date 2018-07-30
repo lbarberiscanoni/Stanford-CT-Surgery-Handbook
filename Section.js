@@ -18,7 +18,7 @@ export default class Section extends React.Component {
         if (this.state.clickStatus == "false") {
             return(
                 <View>
-                    <Button style = { sectionStyles.button } color='#0098db' title={ this.props.name } onPress={ () => this.setState({"clickStatus": "true" }) } >
+                    <Button style = { sectionStyles.button } color='#175e54' title={ this.props.name } onPress={ () => this.setState({"clickStatus": "true" }) } >
                     </Button>
                 </View>
             )
